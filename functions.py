@@ -10,18 +10,10 @@ def fillArray(arr,length,width,size,pad_horizontal,pad_verical,color):
         arr1 = []
         for j in range(length):
             if(color == True):
-                if (i < 3 or i > 5 and i < 9) and (j < 3 or j > 5):
-                    arr1.append(["mapD",pygame.Rect(pad_horizontal+(j*border),pad_verical+(i*border),size,size)])
-                elif (i > 2 and i < 6) and (j > 2 and j < 6):
-                    arr1.append(["mapD",pygame.Rect(pad_horizontal+(j*border),pad_verical+(i*border),size,size)])
-                else:
-                    arr1.append(["mapL",pygame.Rect(pad_horizontal+(j*border),pad_verical+(i*border),size,size)])
+                arr1.append(["mapL",pygame.Rect(pad_horizontal+(j*border),pad_verical+(i*border),size,size)])
             else:
                 arr1.append(["mapB",pygame.Rect(pad_horizontal+(j*border),pad_verical+(i*border),size,size)])
-                
-                
-
-           
+    
         arr.append(arr1)
 
 def drawMap(surf,arr):
@@ -30,9 +22,7 @@ def drawMap(surf,arr):
             if oszlop[0] == "mapD":
                 pygame.draw.rect(surf,(150,150,150),oszlop[1])
             elif oszlop[0] == "mapL":
-                pygame.draw.rect(surf,(200,200,200),oszlop[1])
-            # elif oszlop[0] == "mapB":
-            #     pygame.draw.rect(surf,(0,0,0),oszlop[1])
+                pygame.draw.rect(surf,(100,100,100),oszlop[1])
             elif oszlop[0] == "block":
                 pygame.draw.rect(surf,(0, 255, 140),oszlop[1])
             elif oszlop[0] == "test":
@@ -91,5 +81,5 @@ def writeJson(filename,arr):
 def clearTable(arr,block):
     for i in range(len(arr)):
         for j in range(len(arr)):
-            arr[i][j][0] = "mapB"
+            arr[i][j][0] = block
         

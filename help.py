@@ -39,7 +39,7 @@ def CubeAni(size,res,pos,mode,screen):
     
     frame = 0
     
-    if mode == "mapB":
+    if mode == "mapL":
         map[col][row][0] = mode
         
     while(size != res):
@@ -52,7 +52,7 @@ def CubeAni(size,res,pos,mode,screen):
                 size += 1
             frame = 0
             
-        if mode != "mapB" and size == res:
+        if mode != "mapL" and size == res:
             map[col][row][0] = mode
         
                 
@@ -64,7 +64,7 @@ click_enabled = True
 num = "";
 temp = []
 map = []
-fun.fillArray(map,5,5,40,300,200,(100,100,100))
+fun.fillArray(map,5,5,40,300,200,True)
 #----------------------------------------------------------------------
 
 screen = pygame.display.set_mode((800,730),0,32)
@@ -83,7 +83,7 @@ while True:
             for i in range(5):
                 for j in range(5):
                     if map[i][j][0] == "test":
-                        map[i][j][0] = "mapB"    
+                        map[i][j][0] = "mapL"    
             #-------------------------------------------
             col,row = fun.checkIndex((mx,my),map);
             
@@ -94,11 +94,11 @@ while True:
 
             pos = [col,row]
             
-            if map[col][row][0] == "mapB":
+            if map[col][row][0] == "mapL":
                 x = Thread(target=CubeAni, args=(0,20,pos,"block",screen))
                 x.start()
             elif map[col][row][0] == "block":
-                x = Thread(target=CubeAni, args=(20,0,pos,"mapB",screen))
+                x = Thread(target=CubeAni, args=(20,0,pos,"mapL",screen))
                 x.start()
                 
               
@@ -118,7 +118,7 @@ while True:
                     for i in range(5):
                         for j in range(5):
                             if map[i][j][0] == "test":
-                                map[i][j][0] = "mapB"    
+                                map[i][j][0] = "mapL"    
                     #-------------------------------------------
                     try:
                         for i in shapes[str(num)]["pos"]:
@@ -151,7 +151,7 @@ while True:
                     #-----------------CLEAR------------------
                     for i in range(5):
                         for j in range(5):
-                            map[i][j][0] = "mapB"
+                            map[i][j][0] = "mapL"
                     #----------------------------------------
 
                     shapes[globals["id"]] ={}
