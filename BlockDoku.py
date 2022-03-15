@@ -160,15 +160,13 @@ while True:
             arr = []
             for i in mouse_shape_holding:
                 try:
-                    if mouse_on[1][mouse_on[0][0]-SX+i[0]][mouse_on[0][1]-SY+i[1]][0] != "block":
+                    if mouse_on[1][mouse_on[0][0]-SX+i[0]][mouse_on[0][1]-SY+i[1]][0] != "block" and mouse_on[0][1]-SY+i[1] >=0 and mouse_on[0][0]-SX+i[0] >=0:   
                         mouse_on[1][mouse_on[0][0]-SX+i[0]][mouse_on[0][1]-SY+i[1]][0]= "test"
+                        print(mouse_on[0][0]-SX+i[0],mouse_on[0][1]-SY+i[1])
                 except:
                     continue
-    
-    #nem jeleníti meg az új mapok új blockja
-    
-    
-    
+        
+    #mellékattintok kilép out of range-el miért?
     #-----------------------------------------------------------------------
     fun.drawMap(screen,map)
     for i in range(0,3):
