@@ -58,30 +58,35 @@ while True:
 
     #-----------------------------------------------------------------------
     if event.type == pygame.MOUSEBUTTONDOWN:
-        if hold_mousebutton == False and mouse_on[1][mouse_on[0][0]][mouse_on[0][1]][0] == "block" and mouse_on[1] != map:
+        #out off range
+        
+        try:
+            if hold_mousebutton == False and mouse_on[1][mouse_on[0][0]][mouse_on[0][1]][0] == "block" and mouse_on[1] != map:
 
-            #rögízetett egérpozició
-            mouse_starter_temp_pos = [mx,my]
+                #rögízetett egérpozició
+                mouse_starter_temp_pos = [mx,my]
+                
+                mouse_shape_holding = mouse_on[3]
+                map_index = mouse_on[4]
+                
+                #rögzített map
+                starter_map = mouse_on[1]
+                cons_map = mouse_on[2]
             
-            mouse_shape_holding = mouse_on[3]
-            map_index = mouse_on[4]
-            
-            #rögzített map
-            starter_map = mouse_on[1]
-            cons_map = mouse_on[2]
-          
-            #-----------------------------------------------------------------------     
-            #rögízetett-kattintott x ,y
-            SX = mouse_on[0][0]
-            SY = mouse_on[0][1]     
-            
-            #block és egér közti hely #KELL
-            paddingX = mouse_starter_temp_pos[0]-starter_map[SX][SY][1].x
-            paddingY = mouse_starter_temp_pos[1]-starter_map[SX][SY][1].y
-                        
-            #----------------------------------------------------------------------- 
-            
-            hold_mousebutton = True
+                #-----------------------------------------------------------------------     
+                #rögízetett-kattintott x ,y
+                SX = mouse_on[0][0]
+                SY = mouse_on[0][1]     
+                
+                #block és egér közti hely #KELL
+                paddingX = mouse_starter_temp_pos[0]-starter_map[SX][SY][1].x
+                paddingY = mouse_starter_temp_pos[1]-starter_map[SX][SY][1].y
+                            
+                #----------------------------------------------------------------------- 
+                
+                hold_mousebutton = True
+        except:
+            continue
     
     if mouse_on[1] == map and hold_mousebutton == True:
         count =0
@@ -109,7 +114,33 @@ while True:
             fun.fillArray(starter_map,5,5,42,60 + i*240,470,False)
             
             
+            #kijött egy forma vagy egy vonal de lehet egyszerre több is--------------
+            del_row=[]
+            del_col=[]
+            
+            j_counter=[]
+            for i in range(len(map)):
+                ic = 0  
+                for j in range(len(map[i])):
+                    if map[i][j][0] == "block":
+                        ic += 1
+                        if ic == 9:
+                            del_row.append(i)
+                        j_counter.append(j)
+
+
+            #bugol ---többször teszi bele a cuccokat és nem is azt amit kéne
+            for i in range(9):
+                c = 0
+                for j in j_counter:
+                    if i == j:
+                        c += 1
+                        
+                    if c == 9:
+                        print(i)
         
+            print()
+          
         hold_mousebutton = False
             
     for i in range(len(map)):
@@ -118,7 +149,6 @@ while True:
                 map[i][j][0] = "mapL"
     #Draw shapes------------------------------------------------------------
     
-    #ellenrzi hogy melyik mapban van forma
     counter = [[],[],[]]
     for i in range(0,3):
         counter[i] = 0
@@ -127,7 +157,6 @@ while True:
                 if maps[i][j][k][0] == "block":
                     counter[i] += 1
        
-    
     if counter[0] ==0 and counter[1] ==0 and counter[2] ==0: 
         map_shapes.clear()
         for i in range(3):
@@ -162,11 +191,10 @@ while True:
                 try:
                     if mouse_on[1][mouse_on[0][0]-SX+i[0]][mouse_on[0][1]-SY+i[1]][0] != "block" and mouse_on[0][1]-SY+i[1] >=0 and mouse_on[0][0]-SX+i[0] >=0:   
                         mouse_on[1][mouse_on[0][0]-SX+i[0]][mouse_on[0][1]-SY+i[1]][0]= "test"
-                        print(mouse_on[0][0]-SX+i[0],mouse_on[0][1]-SY+i[1])
                 except:
                     continue
         
-    #mellékattintok kilép out of range-el miért?
+    
     #-----------------------------------------------------------------------
     fun.drawMap(screen,map)
     for i in range(0,3):
