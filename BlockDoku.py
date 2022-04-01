@@ -1,3 +1,4 @@
+from numpy import block
 import py
 import pygame,math,random,sys,os
 import functions as fun
@@ -23,6 +24,8 @@ shapes = fun.loadJson("JSON/shapes",{})
 globals = fun.loadJson("JSON/globals",{})
 
 map = []
+map_cons = []
+
 maps=[[],[],[]]
 maps_cons = [[],[],[]]
 map_shapes = []
@@ -34,6 +37,8 @@ mouse_starter_temp_pos = "None"
 hold_mousebutton = False
 #Fill-arrays------------------------------------------------------------
 fun.fillArray(map,9,9,48,190,10,True)
+fun.fillArray(map_cons,9,9,48,190,10,True)
+
 for i in range(0,3):        
     fun.fillArray(maps[i],5,5,42,60 + i*240,470,False)
     fun.fillArray(maps_cons[i],5,5,42,60 + i*240,470,False)
@@ -124,7 +129,9 @@ while True:
                 #kijött egy forma vagy egy vonal de lehet egyszerre több is--------------
                 del_row=[]
                 del_col=[]
-                
+                starters_array = [[0,0],[0,3],[0,6],
+                                  [3,0],[3,3],[3,6],
+                                  [6,0],[6,3],[6,6]] 
                 j_counter=[]
                 #row
                 for i in range(len(map)):
@@ -145,28 +152,38 @@ while True:
                                 del_col.append(i)
                 
                 #3x3
-                
-                
+                for i in starters_array:
+                    temp = []
+                    for count in range(0,3):
+                        for count2 in range(0,3):
+                            if map[i[0]+count][i[1]+count2][0] == "block":
+                                temp.append([i[0]+count,i[1]+count2])
+                                
+                                
+                    if len(temp) == 9:
+                        for i in temp:
+                            map[i[0]][i[1]][0] = map_cons[i[0]][i[1]][0]   
+                            rm.remove_array.append(map[i[0]][i[1]][1])
+                    
                 for i in del_col:
                     for j in range(len(map)):
-                        map[j][i][0] = "mapL"
+                        map[j][i][0] = map_cons[j][i][0]
                         rm.remove_array.append(map[j][i][1])
                         
                 for i in del_row:
                     for j in range(len(map)):
-                        map[i][j][0] = "mapL"
+                        map[i][j][0] = map_cons[i][j][0]
                         rm.remove_array.append(map[i][j][1])
 
-
-                #------------------------------------------------------------
-                
+                SCORE += len(rm.remove_array)
                 
             hold_mousebutton = False
-            
+    
+    #COLORIZE---------------------------------------------------------------
     for i in range(len(map)):
         for j in range(len(map)):
             if map[i][j][0] == "test":
-                map[i][j][0] = "mapL"
+                map[i][j][0] = map_cons[i][j][0]
     
     #DRAW SHAPES------------------------------------------------------------
         
@@ -194,7 +211,7 @@ while True:
             for j in map_shapes[i]:
                 maps[i][j[0]][j[1]][0] = "block"
     #-----------------------------------------------------------------------
-              
+        
     if(hold_mousebutton == True):
         #mozgatás
         for i in range(len(starter_map)):
@@ -214,6 +231,7 @@ while True:
                         mouse_on[1][mouse_on[0][0]-SX+i[0]][mouse_on[0][1]-SY+i[1]][0]= "test"
                 except:
                     continue
+    
     #-----------------------------------------------------------------------
     bc.tick()
     pygame.draw.rect(screen, (10,10,10),pygame.Rect(map[0][0][1].x,map[0][0][1].y,map[0][8][1].right-map[0][0][1].left,map[0][8][1].right-map[0][0][1].left))
@@ -221,14 +239,8 @@ while True:
 
     fun.drawMap(screen,map)
     
-    #TEDD BELE FÜGGVÉNYBE
     for i in range(0,3):
-        fun.drawMap(screen,maps[i])
+        fun.drawMap(screen,maps[i])  
     
-    rm.removeAnim()
-            
-            
-    
-        
-        
+    rm.removeAnim()    
     pygame.display.update()
